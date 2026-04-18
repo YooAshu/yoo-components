@@ -1,23 +1,22 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
-
 import appCss from "../styles.css?url";
+import { ThemeScript } from "@/components/ThemeScript";
+import { CommandPaletteProvider } from "@/components/CommandPalette";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
+import { FloatingOrbs } from "@/components/FloatingOrbs";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-screen items-center justify-center px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+        <h1 className="font-pixel text-2xl text-foreground" style={{ color: "var(--glow-primary)" }}>404</h1>
+        <h2 className="mt-4 font-pixel text-xs text-foreground">PAGE NOT FOUND</h2>
+        <p className="mt-2 font-vt text-base text-muted-foreground">
+          The page you're looking for has wandered off the grid.
         </p>
         <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
+          <Link to="/" className="pixel-btn pixel-btn-filled">GO HOME</Link>
         </div>
       </div>
     </div>
@@ -29,20 +28,14 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { title: "YooComponents — Mobile UI components for Compose, Flutter, RN" },
+      { name: "description", content: "The cross-platform mobile UI component reference. Browse, preview, and copy production-ready components for Jetpack Compose, Flutter, and React Native." },
+      { name: "author", content: "Genix Apps" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:site", content: "@yoocomponents" },
     ],
     links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
+      { rel: "stylesheet", href: appCss },
     ],
   }),
   shellComponent: RootShell,
@@ -52,11 +45,12 @@ export const Route = createRootRoute({
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
+        <ThemeScript />
         {children}
         <Scripts />
       </body>
@@ -65,5 +59,14 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
-  return <Outlet />;
+  return (
+    <CommandPaletteProvider>
+      <FloatingOrbs />
+      <Navbar />
+      <main className="min-h-[calc(100vh-3.5rem)]">
+        <Outlet />
+      </main>
+      <Footer />
+    </CommandPaletteProvider>
+  );
 }
