@@ -147,11 +147,11 @@ function Sidebar({
   query: string;
   setQuery: (q: string) => void;
 }) {
-  const fwBtn = (fw: FW | "all", label: string, color: string) => {
-    const active = fw === "all" ? frameworks.size === 0 : frameworks.has(fw);
+  const fwBtn = (fw: FW, label: string, color: string) => {
+    const active = frameworks.has(fw);
     return (
       <button
-        onClick={() => fw === "all" ? toggleFw("compose" as FW) && false || setCategoryAllReset() : toggleFw(fw)}
+        onClick={() => toggleFw(fw)}
         className="font-pixel text-[8px] py-2 transition-colors"
         style={{
           background: active ? color : "transparent",
@@ -163,11 +163,6 @@ function Sidebar({
       </button>
     );
   };
-  // tiny helper: clear frameworks
-  function setCategoryAllReset() {
-    // Clear by toggling each existing
-    [...frameworks].forEach((f) => toggleFw(f));
-  }
 
   return (
     <aside className="glass sticky top-20 h-fit p-4">
