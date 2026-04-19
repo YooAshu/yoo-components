@@ -333,11 +333,20 @@ function StatsBar() {
     <section ref={ref} className="mx-auto max-w-7xl px-4 py-16 md:px-6">
       <div className="glass grid grid-cols-2 gap-6 p-8 md:grid-cols-4">
         {stats.map((s, i) => (
-          <div key={s.label} className="text-center">
+          <div key={s.label} className="relative text-center">
             <div
-              className="font-vt text-4xl md:text-5xl"
+              aria-hidden
+              className="pointer-events-none absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full"
               style={{
-                color: "var(--glow-primary)",
+                background: "var(--stat-glow)",
+                filter: "blur(40px)",
+                opacity: visible ? 1 : 0,
+                transition: `opacity 800ms ${i * 100}ms`,
+              }}
+            />
+            <div
+              className="headline-gradient relative font-vt text-4xl md:text-5xl"
+              style={{
                 opacity: visible ? 1 : 0,
                 transform: visible ? "translateY(0)" : "translateY(8px)",
                 transition: `opacity 600ms ${i * 100}ms, transform 600ms ${i * 100}ms`,
@@ -345,7 +354,7 @@ function StatsBar() {
             >
               {s.n}
             </div>
-            <div className="mt-1 font-pixel text-[8px] text-muted-foreground">{s.label}</div>
+            <div className="relative mt-1 font-pixel text-[8px] text-muted-foreground">{s.label}</div>
           </div>
         ))}
       </div>
