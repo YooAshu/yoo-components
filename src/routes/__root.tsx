@@ -5,6 +5,8 @@ import { CommandPaletteProvider } from "@/components/CommandPalette";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { FloatingOrbs } from "@/components/FloatingOrbs";
+import { CursorTrail } from "@/components/CursorTrail";
+import { ScrollProgress } from "@/components/ScrollProgress";
 
 function NotFoundComponent() {
   return (
@@ -61,6 +63,8 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   return (
     <CommandPaletteProvider>
+      <ScrollProgress />
+      <CursorTrail />
       <FloatingOrbs />
       <Navbar />
       <main className="min-h-[calc(100vh-3.5rem)]">
