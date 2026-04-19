@@ -6,8 +6,6 @@ import { CommandPaletteTrigger } from "@/components/CommandPalette";
 
 const links = [
   { to: "/components" as const, label: "COMPONENTS" },
-  { to: "/playground" as const, label: "PLAYGROUND" },
-  { to: "/compare" as const, label: "COMPARE" },
   { to: "/changelog" as const, label: "CHANGELOG" },
   { to: "/about" as const, label: "ABOUT" },
 ];

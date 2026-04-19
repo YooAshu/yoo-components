@@ -26,8 +26,6 @@ export function Footer() {
           <h3 className="font-pixel text-[10px] text-foreground">EXPLORE</h3>
           <ul className="mt-4 space-y-2 font-vt text-base text-muted-foreground">
             <li><Link to="/components" className="hover:text-foreground">Components</Link></li>
-            <li><Link to="/playground" className="hover:text-foreground">Playground</Link></li>
-            <li><Link to="/compare" className="hover:text-foreground">Compare</Link></li>
             <li><Link to="/changelog" className="hover:text-foreground">Changelog</Link></li>
           </ul>
         </div>
