@@ -81,18 +81,18 @@ function Hero() {
   const cur = HERO_SNIPPETS[idx];
 
   return (
-    <section className="relative overflow-hidden pixel-grid-bg">
+    <section className="relative overflow-hidden pixel-grid-bg scanlines">
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 pb-16 pt-12 md:px-6 md:pb-24 md:pt-20 lg:grid-cols-2">
-        <div>
+        <div className="relative z-10">
           <span className="pixel-badge blink" style={{ color: "var(--glow-primary)", borderColor: "var(--glow-primary)" }}>
             [ OPEN SOURCE ]
           </span>
-          <h1 className="mt-6 font-pixel text-[14px] leading-[2.2] text-foreground sm:text-base md:text-[18px] md:leading-[2]">
-            THE COMPONENT
+          <h1 className="mt-6 font-pixel text-[14px] leading-[2.2] sm:text-base md:text-[18px] md:leading-[2]">
+            <span className="headline-gradient">THE COMPONENT</span>
             <br />
-            <span style={{ color: "var(--glow-primary)" }} className="text-glow">LIBRARY</span> FOR
+            <span className="headline-gradient">LIBRARY</span> <span className="headline-gradient">FOR</span>
             <br />
-            MOBILE DEVS
+            <span className="headline-gradient">MOBILE DEVS</span>
           </h1>
           <p className="mt-6 max-w-md text-base text-muted-foreground sm:text-lg">
             Jetpack Compose · Flutter · React Native.
@@ -224,25 +224,20 @@ function AppDownload() {
     <section className="relative mx-auto max-w-7xl px-4 py-16 md:px-6">
       <div
         className="glass-elevated relative overflow-hidden p-8 md:p-12"
-        style={{
-          boxShadow: "0 0 80px var(--glow-soft), inset 0 1px 0 oklch(1 0 0 / 0.08)",
-        }}
       >
         <div
-          className="pointer-events-none absolute inset-0 opacity-50"
-          style={{
-            background: "radial-gradient(circle at 80% 50%, var(--glow-soft), transparent 60%)",
-          }}
+          className="pointer-events-none absolute inset-0"
+          style={{ background: "var(--download-glow)" }}
         />
         <div className="relative grid items-center gap-8 md:grid-cols-2">
           <div>
             <span className="pixel-badge" style={{ color: "var(--glow-primary)", borderColor: "var(--glow-primary)" }}>
               [ ANDROID APP ]
             </span>
-            <h2 className="mt-4 font-pixel text-[11px] text-foreground md:text-sm leading-[2.2]">
-              PREVIEW LIVE
+            <h2 className="mt-4 font-pixel text-[11px] md:text-sm leading-[2.2]">
+              <span className="headline-gradient">PREVIEW LIVE</span>
               <br />
-              ON ANDROID
+              <span className="headline-gradient">ON ANDROID</span>
             </h2>
             <p className="mt-4 max-w-md text-muted-foreground">
               Tap any component, see it run on your phone. Tweak props live. Built-in code copy.
@@ -338,11 +333,20 @@ function StatsBar() {
     <section ref={ref} className="mx-auto max-w-7xl px-4 py-16 md:px-6">
       <div className="glass grid grid-cols-2 gap-6 p-8 md:grid-cols-4">
         {stats.map((s, i) => (
-          <div key={s.label} className="text-center">
+          <div key={s.label} className="relative text-center">
             <div
-              className="font-vt text-4xl md:text-5xl"
+              aria-hidden
+              className="pointer-events-none absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full"
               style={{
-                color: "var(--glow-primary)",
+                background: "var(--stat-glow)",
+                filter: "blur(40px)",
+                opacity: visible ? 1 : 0,
+                transition: `opacity 800ms ${i * 100}ms`,
+              }}
+            />
+            <div
+              className="headline-gradient relative font-vt text-4xl md:text-5xl"
+              style={{
                 opacity: visible ? 1 : 0,
                 transform: visible ? "translateY(0)" : "translateY(8px)",
                 transition: `opacity 600ms ${i * 100}ms, transform 600ms ${i * 100}ms`,
@@ -350,7 +354,7 @@ function StatsBar() {
             >
               {s.n}
             </div>
-            <div className="mt-1 font-pixel text-[8px] text-muted-foreground">{s.label}</div>
+            <div className="relative mt-1 font-pixel text-[8px] text-muted-foreground">{s.label}</div>
           </div>
         ))}
       </div>

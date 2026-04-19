@@ -18,10 +18,10 @@ export function Navbar() {
 
   return (
     <header
-      className="sticky top-0 z-40 backdrop-blur-xl"
+      className="shimmer-border sticky top-0 z-40 backdrop-blur-xl"
       style={{
-        background: "oklch(0.1 0.06 300 / 0.7)",
-        borderBottom: "1px solid var(--glass-border)",
+        background: "var(--navbar-bg)",
+        borderBottom: "1px solid var(--navbar-border)",
       }}
     >
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 md:px-6">
@@ -93,7 +93,6 @@ export function Navbar() {
           />
           <div
             className="glass-elevated absolute right-0 top-0 h-full w-72 p-6"
-            style={{ borderLeft: "2px solid var(--glass-border)" }}
           >
             <div className="mb-8 flex items-center justify-between">
               <YooLogo size={20} />

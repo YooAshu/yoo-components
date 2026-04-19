@@ -66,7 +66,13 @@ function BrowserPage() {
             COMPONENTS{category && <> &gt; <span className="text-foreground">{CATEGORIES.find((c) => c.key === category)?.label.toUpperCase()}</span></>}
           </div>
           <div className="flex items-center gap-2">
-            <span className="font-pixel text-[8px] text-muted-foreground">{filtered.length} RESULTS</span>
+            <span
+              key={`${filtered.length}-${category ?? "all"}-${[...frameworks].join(",")}-${query}`}
+              className="pop-in font-vt text-base"
+              style={{ color: "var(--glow-primary)" }}
+            >
+              [ {filtered.length} RESULTS ]
+            </span>
             <div className="flex border-2 border-border">
               <button
                 onClick={() => setView("grid")}

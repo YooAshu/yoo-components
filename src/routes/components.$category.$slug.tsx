@@ -34,27 +34,123 @@ export const Route = createFileRoute("/components/$category/$slug")({
 
 type FwKey = "compose" | "flutter" | "reactNative";
 
+const TABS: { key: FwKey; label: string; lang: "kotlin" | "dart" | "tsx"; ext: string; Logo: React.ComponentType<{ size?: number }> }[] = [
+  { key: "compose", label: "COMPOSE", lang: "kotlin", ext: "kt", Logo: ComposeLogo },
+  { key: "flutter", label: "FLUTTER", lang: "dart", ext: "dart", Logo: FlutterLogo },
+  { key: "reactNative", label: "REACT NATIVE", lang: "tsx", ext: "tsx", Logo: RNLogo },
+];
+
+const FW_COLOR: Record<FwKey, string> = {
+  compose: "var(--glow-compose)",
+  flutter: "var(--glow-flutter)",
+  reactNative: "var(--glow-rn)",
+};
+
+function buildHowTo(name: string, fw: FwKey): string {
+  const cls = name.replace(/\s+/g, "");
+  if (fw === "compose") {
+    return `@Composable
+fun ExampleScreen() {
+    // Example: how to use this component
+    ${cls}(
+        text = "Hello World",
+        onClick = { /* your action here */ }
+    )
+}`;
+  }
+  if (fw === "flutter") {
+    return `class ExampleScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ${cls}(
+      text: 'Hello World',
+      onPressed: () {
+        // your action here
+      },
+    );
+  }
+}`;
+  }
+  return `export default function ExampleScreen() {
+  return (
+    <${cls}
+      text="Hello World"
+      onPress={() => {
+        // your action here
+      }}
+    />
+  );
+}`;
+}
+
+function FrameworkTabs({
+  active,
+  onSelect,
+  available,
+}: {
+  active: FwKey;
+  onSelect: (k: FwKey) => void;
+  available: Record<FwKey, boolean>;
+}) {
+  return (
+    <div className="relative mb-2 flex flex-wrap gap-1">
+      {TABS.map((t) => {
+        const isActive = active === t.key;
+        const unavailable = !available[t.key];
+        return (
+          <button
+            key={t.key}
+            onClick={() => onSelect(t.key)}
+            className="relative flex items-center gap-2 px-3 py-2 font-pixel text-[8px] border-2 transition-all"
+            style={{
+              background: isActive ? FW_COLOR[t.key] : "transparent",
+              color: isActive ? "white" : (unavailable ? "var(--text-muted)" : "var(--foreground)"),
+              borderColor: isActive ? FW_COLOR[t.key] : "var(--border)",
+              opacity: unavailable && !isActive ? 0.6 : 1,
+            }}
+          >
+            <t.Logo size={14} />
+            {t.label}
+            {unavailable && <span className="ml-1 opacity-70">(SOON)</span>}
+            {isActive && (
+              <span
+                aria-hidden
+                className="absolute -bottom-[2px] left-0 right-0 h-[2px]"
+                style={{ background: FW_COLOR[t.key], boxShadow: `0 0 8px ${FW_COLOR[t.key]}` }}
+              />
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 function DetailPage() {
   const { component } = Route.useLoaderData();
   const params = Route.useParams();
   const cat = CATEGORIES.find((c) => c.key === (params.category as ComponentCategory));
-  const [tab, setTab] = useState<FwKey>(
-    !isStub(component.frameworks.compose) ? "compose"
-    : !isStub(component.frameworks.flutter) ? "flutter"
-    : "reactNative",
-  );
+
+  const available: Record<FwKey, boolean> = {
+    compose: !isStub(component.frameworks.compose),
+    flutter: !isStub(component.frameworks.flutter),
+    reactNative: !isStub(component.frameworks.reactNative),
+  };
+
+  const initial: FwKey =
+    available.compose ? "compose" : available.flutter ? "flutter" : "reactNative";
+
+  // SHARED FRAMEWORK STATE — drives BOTH code blocks
+  const [tab, setTab] = useState<FwKey>(initial);
   const [variant, setVariant] = useState(0);
   const [previewLight, setPreviewLight] = useState(false);
 
-  const tabs: { key: FwKey; label: string; lang: "kotlin" | "dart" | "tsx"; ext: string; Logo: React.ComponentType<{ size?: number }> }[] = [
-    { key: "compose", label: "COMPOSE", lang: "kotlin", ext: "kt", Logo: ComposeLogo },
-    { key: "flutter", label: "FLUTTER", lang: "dart", ext: "dart", Logo: FlutterLogo },
-    { key: "reactNative", label: "REACT NATIVE", lang: "tsx", ext: "tsx", Logo: RNLogo },
-  ];
-
   const code = component.frameworks[tab];
   const stubbed = isStub(code);
-  const filename = `${component.name.replace(/\s+/g, "")}.${tabs.find((t) => t.key === tab)?.ext}`;
+  const tabMeta = TABS.find((t) => t.key === tab)!;
+  const filename = `${component.name.replace(/\s+/g, "")}.${tabMeta.ext}`;
+  const howToFilename = `Example.${tabMeta.ext}`;
+  const howToCode = buildHowTo(component.name, tab);
 
   const related = getRelated(component);
 
@@ -72,7 +168,10 @@ function DetailPage() {
         <div className="mt-3 flex flex-wrap items-center gap-3">
           <h1 className="font-pixel text-xs text-foreground md:text-sm">{component.name.toUpperCase()}</h1>
           {component.isNew && (
-            <span className="blink pixel-badge" style={{ background: "var(--glow-primary)", color: "white", borderColor: "var(--glow-primary)" }}>
+            <span
+              className="blink pixel-badge"
+              style={{ color: "var(--glow-primary)", borderColor: "var(--glow-primary)" }}
+            >
               NEW
             </span>
           )}
@@ -128,28 +227,7 @@ function DetailPage() {
 
         {/* Code */}
         <div>
-          <div className="mb-2 flex flex-wrap gap-1">
-            {tabs.map((t) => {
-              const unavailable = isStub(component.frameworks[t.key]);
-              return (
-                <button
-                  key={t.key}
-                  onClick={() => setTab(t.key)}
-                  className="flex items-center gap-2 px-3 py-2 font-pixel text-[8px] border-2 transition-all"
-                  style={{
-                    background: tab === t.key ? "var(--glow-primary)" : "transparent",
-                    color: tab === t.key ? "white" : (unavailable ? "var(--text-muted)" : "var(--foreground)"),
-                    borderColor: tab === t.key ? "var(--glow-primary)" : "var(--border)",
-                    opacity: unavailable && tab !== t.key ? 0.6 : 1,
-                  }}
-                >
-                  <t.Logo size={14} />
-                  {t.label}
-                  {unavailable && <span className="ml-1 opacity-70">(SOON)</span>}
-                </button>
-              );
-            })}
-          </div>
+          <FrameworkTabs active={tab} onSelect={setTab} available={available} />
           {stubbed ? (
             <div className="glass flex h-[280px] flex-col items-center justify-center p-8 text-center">
               <span className="font-pixel text-[10px] text-muted-foreground">CODE COMING SOON</span>
@@ -158,7 +236,12 @@ function DetailPage() {
               </p>
             </div>
           ) : (
-            <CodeBlock code={code!} lang={tabs.find((t) => t.key === tab)!.lang} filename={filename} />
+            <CodeBlock
+              code={code!}
+              lang={tabMeta.lang}
+              filename={filename}
+              framework={tab}
+            />
           )}
         </div>
       </div>
@@ -191,6 +274,21 @@ function DetailPage() {
           </div>
         </section>
       )}
+
+      {/* HOW TO USE — second code block, shares activeFramework state */}
+      <section className="mt-12">
+        <h2 className="font-pixel text-[10px] text-foreground">HOW TO USE</h2>
+        <p className="mb-4 mt-2 font-vt text-base text-muted-foreground">
+          Replace with your own values and logic
+        </p>
+        <FrameworkTabs active={tab} onSelect={setTab} available={available} />
+        <CodeBlock
+          code={howToCode}
+          lang={tabMeta.lang}
+          filename={howToFilename}
+          framework={tab}
+        />
+      </section>
 
       {/* Usage notes */}
       {component.usageNotes && (
