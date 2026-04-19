@@ -9,15 +9,28 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PlaygroundRouteImport } from './routes/playground'
 import { Route as ComponentsRouteImport } from './routes/components'
+import { Route as CompareRouteImport } from './routes/compare'
 import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ComponentsIndexRouteImport } from './routes/components.index'
 import { Route as ComponentsCategorySlugRouteImport } from './routes/components.$category.$slug'
 
+const PlaygroundRoute = PlaygroundRouteImport.update({
+  id: '/playground',
+  path: '/playground',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ComponentsRoute = ComponentsRouteImport.update({
   id: '/components',
   path: '/components',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareRoute = CompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChangelogRoute = ChangelogRouteImport.update({
@@ -35,6 +48,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ComponentsIndexRoute = ComponentsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ComponentsRoute,
+} as any)
 const ComponentsCategorySlugRoute = ComponentsCategorySlugRouteImport.update({
   id: '/$category/$slug',
   path: '/$category/$slug',
@@ -45,14 +63,19 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/changelog': typeof ChangelogRoute
+  '/compare': typeof CompareRoute
   '/components': typeof ComponentsRouteWithChildren
+  '/playground': typeof PlaygroundRoute
+  '/components/': typeof ComponentsIndexRoute
   '/components/$category/$slug': typeof ComponentsCategorySlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/changelog': typeof ChangelogRoute
-  '/components': typeof ComponentsRouteWithChildren
+  '/compare': typeof CompareRoute
+  '/playground': typeof PlaygroundRoute
+  '/components': typeof ComponentsIndexRoute
   '/components/$category/$slug': typeof ComponentsCategorySlugRoute
 }
 export interface FileRoutesById {
@@ -60,7 +83,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/changelog': typeof ChangelogRoute
+  '/compare': typeof CompareRoute
   '/components': typeof ComponentsRouteWithChildren
+  '/playground': typeof PlaygroundRoute
+  '/components/': typeof ComponentsIndexRoute
   '/components/$category/$slug': typeof ComponentsCategorySlugRoute
 }
 export interface FileRouteTypes {
@@ -69,13 +95,18 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/changelog'
+    | '/compare'
     | '/components'
+    | '/playground'
+    | '/components/'
     | '/components/$category/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/changelog'
+    | '/compare'
+    | '/playground'
     | '/components'
     | '/components/$category/$slug'
   id:
@@ -83,7 +114,10 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/changelog'
+    | '/compare'
     | '/components'
+    | '/playground'
+    | '/components/'
     | '/components/$category/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -91,16 +125,32 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   ChangelogRoute: typeof ChangelogRoute
+  CompareRoute: typeof CompareRoute
   ComponentsRoute: typeof ComponentsRouteWithChildren
+  PlaygroundRoute: typeof PlaygroundRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/playground': {
+      id: '/playground'
+      path: '/playground'
+      fullPath: '/playground'
+      preLoaderRoute: typeof PlaygroundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/components': {
       id: '/components'
       path: '/components'
       fullPath: '/components'
       preLoaderRoute: typeof ComponentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare': {
+      id: '/compare'
+      path: '/compare'
+      fullPath: '/compare'
+      preLoaderRoute: typeof CompareRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/changelog': {
@@ -124,6 +174,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/components/': {
+      id: '/components/'
+      path: '/'
+      fullPath: '/components/'
+      preLoaderRoute: typeof ComponentsIndexRouteImport
+      parentRoute: typeof ComponentsRoute
+    }
     '/components/$category/$slug': {
       id: '/components/$category/$slug'
       path: '/$category/$slug'
@@ -135,10 +192,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface ComponentsRouteChildren {
+  ComponentsIndexRoute: typeof ComponentsIndexRoute
   ComponentsCategorySlugRoute: typeof ComponentsCategorySlugRoute
 }
 
 const ComponentsRouteChildren: ComponentsRouteChildren = {
+  ComponentsIndexRoute: ComponentsIndexRoute,
   ComponentsCategorySlugRoute: ComponentsCategorySlugRoute,
 }
 
@@ -150,7 +209,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ChangelogRoute: ChangelogRoute,
+  CompareRoute: CompareRoute,
   ComponentsRoute: ComponentsRouteWithChildren,
+  PlaygroundRoute: PlaygroundRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
