@@ -261,7 +261,7 @@ function DetailPage() {
                 </tr>
               </thead>
               <tbody>
-                {component.props.map((p, i) => (
+                {component.props.map((p: { name: string; type: string; default: string; description: string }, i: number) => (
                   <tr key={p.name} style={i > 0 ? { borderTop: "1px solid var(--glass-border)" } : {}}>
                     <td className="px-4 py-3 font-mono text-sm text-foreground">{p.name}</td>
                     <td className="px-4 py-3 font-vt text-base" style={{ color: typeColor(p.type) }}>{p.type}</td>
