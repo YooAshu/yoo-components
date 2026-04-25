@@ -1,6 +1,8 @@
-import type { Component } from "@/data/components";
+import type { Component } from "@/data/types";
 
-const STUB_PREFIX = "// Coming soon";
+export function isStub(fw: import("@/data/types").ComponentFrameworkCode | null) {
+  return !fw || !fw.component;
+}
 
 export function FrameworkDots({ component, size = 8 }: { component: Component; size?: number }) {
   const dot = (color: string, available: boolean, label: string) => (
@@ -16,16 +18,13 @@ export function FrameworkDots({ component, size = 8 }: { component: Component; s
       }}
     />
   );
+
   const f = component.frameworks;
   return (
     <span className="inline-flex items-center gap-1.5">
-      {dot("var(--glow-compose)", !!f.compose && !f.compose.startsWith(STUB_PREFIX), "Compose")}
-      {dot("var(--glow-flutter)", !!f.flutter && !f.flutter.startsWith(STUB_PREFIX), "Flutter")}
-      {dot("var(--glow-rn)", !!f.reactNative && !f.reactNative.startsWith(STUB_PREFIX), "React Native")}
+      {dot("var(--glow-compose)", !isStub(f.compose), "Compose")}
+      {dot("var(--glow-flutter)", !isStub(f.flutter), "Flutter")}
+      {dot("var(--glow-rn)", !isStub(f.reactNative), "React Native")}
     </span>
   );
-}
-
-export function isStub(code: string | null) {
-  return !code || code.startsWith(STUB_PREFIX);
 }

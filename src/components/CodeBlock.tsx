@@ -4,7 +4,7 @@ import { PxCheck, PxCopy } from "@/components/PixelIcons";
 
 interface Props {
   code: string;
-  lang: "kotlin" | "dart" | "tsx" | "jsx" | "javascript";
+  lang: "kotlin" | "dart" | "tsx" | "jsx" | "javascript" | "xml" | "yaml";
   filename?: string;
   maxHeight?: number;
   framework?: "compose" | "flutter" | "reactNative";
@@ -32,9 +32,15 @@ export function CodeBlock({
   useEffect(() => {
     let cancelled = false;
     codeToHtml(code, { lang, theme: "tokyo-night" })
-      .then((h) => { if (!cancelled) setHtml(h); })
-      .catch(() => { if (!cancelled) setHtml(`<pre>${escapeHtml(code)}</pre>`); });
-    return () => { cancelled = true; };
+      .then((h) => {
+        if (!cancelled) setHtml(h);
+      })
+      .catch(() => {
+        if (!cancelled) setHtml(`<pre>${escapeHtml(code)}</pre>`);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [code, lang]);
 
   const lines = code.split("\n");
@@ -47,7 +53,9 @@ export function CodeBlock({
       setFlash(true);
       setTimeout(() => setCopied(false), 2000);
       setTimeout(() => setFlash(false), 450);
-    } catch {/* noop */}
+    } catch {
+      /* noop */
+    }
   };
 
   const dotColor = framework ? FW_DOT[framework] : "var(--glow-primary)";
@@ -63,7 +71,9 @@ export function CodeBlock({
             className="inline-block h-2.5 w-2.5 rounded-full"
             style={{ background: dotColor, boxShadow: `0 0 8px ${dotColor}` }}
           />
-          <span className="font-vt text-sm text-muted-foreground">{filename ?? `snippet.${lang}`}</span>
+          <span className="font-vt text-sm text-muted-foreground">
+            {filename ?? `snippet.${lang}`}
+          </span>
         </div>
         <button
           onClick={onCopy}

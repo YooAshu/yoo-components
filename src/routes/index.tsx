@@ -9,9 +9,16 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "YooComponents — Compose, Flutter, React Native components" },
-      { name: "description", content: "50+ production-ready mobile UI components. Browse, preview, and copy code for Jetpack Compose, Flutter, and React Native." },
+      {
+        name: "description",
+        content:
+          "50+ production-ready mobile UI components. Browse, preview, and copy code for Jetpack Compose, Flutter, and React Native.",
+      },
       { property: "og:title", content: "YooComponents" },
-      { property: "og:description", content: "The component library for mobile devs. Compose · Flutter · React Native." },
+      {
+        property: "og:description",
+        content: "The component library for mobile devs. Compose · Flutter · React Native.",
+      },
       { property: "og:type", content: "website" },
     ],
   }),
@@ -84,23 +91,27 @@ function Hero() {
     <section className="relative overflow-hidden pixel-grid-bg scanlines">
       <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 pb-16 pt-12 md:px-6 md:pb-24 md:pt-20 lg:grid-cols-2">
         <div className="relative z-10">
-          <span className="pixel-badge blink" style={{ color: "var(--glow-primary)", borderColor: "var(--glow-primary)" }}>
+          <span
+            className="pixel-badge blink"
+            style={{ color: "var(--glow-primary)", borderColor: "var(--glow-primary)" }}
+          >
             [ OPEN SOURCE ]
           </span>
-          <h1 className="mt-6 font-pixel text-[14px] leading-[2.2] sm:text-base md:text-[18px] md:leading-[2]">
+          <h1 className="mt-6 font-pixel text-[14px] leading-[2.2] sm:text-base md:text-[30px] md:leading-[2]">
             <span className="headline-gradient">THE COMPONENT</span>
             <br />
-            <span className="headline-gradient">LIBRARY</span> <span className="headline-gradient">FOR</span>
+            <span className="headline-gradient">LIBRARY</span>{" "}
+            <span className="headline-gradient">FOR</span>
             <br />
             <span className="headline-gradient">MOBILE DEVS</span>
           </h1>
           <p className="mt-6 max-w-md text-base text-muted-foreground sm:text-lg">
             Jetpack Compose · Flutter · React Native.
-            Browse, preview, and copy production-ready UI components.
+            <br /> Browse, preview, and copy production-ready UI components.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link to="/components" className="pixel-btn pixel-btn-filled">
-              BROWSE COMPONENTS <PxArrow size={12} />
+              BROWSE COMPONENTS <PxArrow size={16} />
             </Link>
             <a
               href="https://github.com"
@@ -108,7 +119,7 @@ function Hero() {
               rel="noopener noreferrer"
               className="pixel-btn"
             >
-              GITHUB <PxGithub size={12} />
+              GITHUB <PxGithub size={18} />
             </a>
           </div>
           <div className="mt-8 flex flex-wrap gap-x-4 gap-y-2 font-vt text-base text-muted-foreground">
@@ -131,7 +142,13 @@ function Hero() {
                 filter: "blur(40px)",
               }}
             />
-            <CodeBlock key={idx} code={cur.code} lang={cur.lang} filename={cur.title} maxHeight={300} />
+            <CodeBlock
+              key={idx}
+              code={cur.code}
+              lang={cur.lang}
+              filename={cur.title}
+              maxHeight={300}
+            />
           </div>
         </div>
       </div>
@@ -157,7 +174,9 @@ function FrameworkStrip() {
             <it.Logo size={36} />
             <div>
               <div className="font-vt text-xl text-foreground">{it.name}</div>
-              <div className="font-pixel text-[8px] text-muted-foreground">[ {it.count} COMPONENTS ]</div>
+              <div className="font-pixel text-[8px] text-muted-foreground">
+                [ {it.count} COMPONENTS ]
+              </div>
             </div>
           </div>
         ))}
@@ -177,7 +196,10 @@ function FeaturedGrid() {
             POPULAR COMPONENTS
           </h2>
         </div>
-        <Link to="/components" className="hidden items-center gap-2 font-pixel text-[9px] text-muted-foreground hover:text-foreground md:inline-flex">
+        <Link
+          to="/components"
+          className="hidden items-center gap-2 font-pixel text-[9px] text-muted-foreground hover:text-foreground md:inline-flex"
+        >
           VIEW ALL <PxArrow size={10} />
         </Link>
       </div>
@@ -192,15 +214,25 @@ function FeaturedGrid() {
 
 function HowItWorks() {
   const steps = [
-    { n: "01", title: "BROWSE", desc: "Filter by category or framework. 12 categories, 50+ components." },
-    { n: "02", title: "PREVIEW", desc: "See real Compose, Flutter, and React Native code side-by-side." },
-    { n: "03", title: "COPY", desc: "One-click copy to clipboard or install the Android app for live previews." },
+    {
+      n: "01",
+      title: "BROWSE",
+      desc: "Filter by category or framework. 12 categories, 50+ components.",
+    },
+    {
+      n: "02",
+      title: "PREVIEW",
+      desc: "See real Compose, Flutter, and React Native code side-by-side.",
+    },
+    {
+      n: "03",
+      title: "COPY",
+      desc: "One-click copy to clipboard or install the Android app for live previews.",
+    },
   ];
   return (
     <section className="mx-auto max-w-7xl px-4 py-16 md:px-6 md:py-24">
-      <h2 className="mb-10 font-pixel text-[11px] text-foreground md:text-sm">
-        HOW IT WORKS
-      </h2>
+      <h2 className="mb-10 font-pixel text-[11px] text-foreground md:text-sm">HOW IT WORKS</h2>
       <div className="grid gap-4 md:grid-cols-3">
         {steps.map((s) => (
           <div key={s.n} className="glass p-6">
@@ -222,16 +254,17 @@ function HowItWorks() {
 function AppDownload() {
   return (
     <section className="relative mx-auto max-w-7xl px-4 py-16 md:px-6">
-      <div
-        className="glass-elevated relative overflow-hidden p-8 md:p-12"
-      >
+      <div className="glass-elevated relative overflow-hidden p-8 md:p-12">
         <div
           className="pointer-events-none absolute inset-0"
           style={{ background: "var(--download-glow)" }}
         />
         <div className="relative grid items-center gap-8 md:grid-cols-2">
           <div>
-            <span className="pixel-badge" style={{ color: "var(--glow-primary)", borderColor: "var(--glow-primary)" }}>
+            <span
+              className="pixel-badge"
+              style={{ color: "var(--glow-primary)", borderColor: "var(--glow-primary)" }}
+            >
               [ ANDROID APP ]
             </span>
             <h2 className="mt-4 font-pixel text-[11px] md:text-sm leading-[2.2]">
@@ -268,7 +301,15 @@ function AppDownload() {
 function PhoneMockup() {
   return (
     <svg width="180" height="320" viewBox="0 0 180 320" className="pixel">
-      <rect x="10" y="10" width="160" height="300" fill="var(--background)" stroke="var(--glow-primary)" strokeWidth="3" />
+      <rect
+        x="10"
+        y="10"
+        width="160"
+        height="300"
+        fill="var(--background)"
+        stroke="var(--glow-primary)"
+        strokeWidth="3"
+      />
       <rect x="60" y="14" width="60" height="6" fill="var(--glow-primary)" opacity="0.4" />
       <rect x="20" y="40" width="140" height="20" fill="var(--glow-primary)" opacity="0.3" />
       <rect x="20" y="70" width="140" height="80" fill="var(--glow-primary)" opacity="0.15" />
@@ -288,22 +329,22 @@ function QRPlaceholder({ size = 80 }: { size?: number }) {
     <svg width={size} height={size} viewBox="0 0 16 16" className="pixel">
       <rect x="0" y="0" width="16" height="16" fill="white" />
       {[
-        [0,0,1,1,1,1,1,0,1,0,1,1,1,1,1,0],
-        [1,0,0,0,0,0,1,0,0,1,1,0,0,0,0,1],
-        [1,0,1,1,1,0,1,0,1,0,1,0,1,1,1,0],
-        [1,0,1,1,1,0,1,0,1,1,0,0,1,1,1,0],
-        [1,0,1,1,1,0,1,0,0,1,1,0,1,1,1,0],
-        [1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,1],
-        [1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,0],
-        [0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0],
-        [1,1,0,1,0,1,1,0,0,1,0,1,1,0,1,1],
-        [0,1,1,0,1,0,0,1,1,0,1,0,0,1,1,0],
-        [1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1],
-        [0,1,0,0,0,0,1,1,1,0,0,0,0,1,1,0],
-        [1,1,1,1,1,1,1,0,0,1,0,1,1,0,1,1],
-        [1,0,0,0,0,0,1,0,1,0,1,1,0,1,0,0],
-        [1,0,1,1,1,0,1,0,0,1,0,0,1,1,1,1],
-        [1,0,0,0,0,0,1,0,1,1,1,1,0,0,0,1],
+        [0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0],
+        [1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1],
+        [1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 0],
+        [1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0],
+        [1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0],
+        [1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0],
+        [1, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1],
+        [0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0],
+        [1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1],
+        [0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 0],
+        [1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1],
+        [1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 0],
+        [1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1],
       ].flatMap((row, y) =>
         row.map((v, x) =>
           v ? <rect key={`${x}-${y}`} x={x} y={y} width="1" height="1" fill="black" /> : null,
@@ -325,7 +366,9 @@ function StatsBar() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const obs = new IntersectionObserver(([e]) => e.isIntersecting && setVisible(true), { threshold: 0.4 });
+    const obs = new IntersectionObserver(([e]) => e.isIntersecting && setVisible(true), {
+      threshold: 0.4,
+    });
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
@@ -354,7 +397,9 @@ function StatsBar() {
             >
               {s.n}
             </div>
-            <div className="relative mt-1 font-pixel text-[8px] text-muted-foreground">{s.label}</div>
+            <div className="relative mt-1 font-pixel text-[8px] text-muted-foreground">
+              {s.label}
+            </div>
           </div>
         ))}
       </div>

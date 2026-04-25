@@ -1,18 +1,30 @@
-import type { Component } from "@/data/components";
+import type { Component } from "@/data/types";
+
+import { useTheme } from "@/hooks/useTheme";
 
 /* Pixel-art SVG mockup that varies by category */
-export function ComponentVisual({ component, height = 160 }: { component: Component; height?: number }) {
+export function ComponentVisual({
+  component,
+  height = 160,
+}: {
+  component: Component;
+  height?: number;
+}) {
+  const { theme } = useTheme();
+
+  // 1. Check if media exists first
+  if (component.previewMedia) {
+    return (
+      <img
+        src={theme === "dark" ? component.previewMedia.night : component.previewMedia.day}
+        alt={`${component.name} preview`}
+        className="p-5 w-full object-contain "
+      />
+    );
+  }
   const c = component.category;
   return (
-    <div
-      className="relative flex w-full items-center justify-center overflow-hidden"
-      style={{
-        height,
-        background:
-          "linear-gradient(135deg, oklch(0.12 0.07 295) 0%, oklch(0.08 0.05 290) 100%)",
-        borderBottom: "1px solid var(--glass-border)",
-      }}
-    >
+    <div className="relative flex w-full items-center justify-center overflow-hidden">
       <div
         className="pointer-events-none absolute inset-0 opacity-40"
         style={{
@@ -92,7 +104,15 @@ function DialogVisual() {
   return (
     <svg width="120" height="100" viewBox="0 0 120 100" className="pixel">
       <rect x="0" y="0" width="120" height="100" fill="black" opacity="0.3" />
-      <rect x="10" y="20" width="100" height="60" fill="var(--background)" stroke={PURPLE} strokeWidth="2" />
+      <rect
+        x="10"
+        y="20"
+        width="100"
+        height="60"
+        fill="var(--background)"
+        stroke={PURPLE}
+        strokeWidth="2"
+      />
       <rect x="20" y="30" width="50" height="6" fill="white" />
       <rect x="20" y="42" width="80" height="3" fill="white" opacity="0.5" />
       <rect x="20" y="48" width="60" height="3" fill="white" opacity="0.5" />
@@ -115,7 +135,15 @@ function ChipVisual() {
     <svg width="160" height="40" viewBox="0 0 160 40" className="pixel">
       {[0, 50, 100].map((x, i) => (
         <g key={i}>
-          <rect x={x + 4} y="14" width="40" height="14" fill={i === 1 ? PURPLE : "transparent"} stroke={PURPLE} strokeWidth="2" />
+          <rect
+            x={x + 4}
+            y="14"
+            width="40"
+            height="14"
+            fill={i === 1 ? PURPLE : "transparent"}
+            stroke={PURPLE}
+            strokeWidth="2"
+          />
           <rect x={x + 12} y="20" width="24" height="3" fill={i === 1 ? "white" : PURPLE} />
         </g>
       ))}

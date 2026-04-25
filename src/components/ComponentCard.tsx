@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import type { Component } from "@/data/components";
+import type { Component } from "@/data/types";
 import { ComponentVisual } from "@/components/ComponentVisual";
 import { FrameworkDots } from "@/components/FrameworkDots";
 import { CATEGORIES } from "@/data/components";
@@ -7,9 +7,8 @@ import { PixelCorners } from "@/components/PixelCorners";
 
 function primaryFramework(c: Component): "compose" | "flutter" | "reactNative" {
   const f = c.frameworks;
-  const stub = (s: string | null) => !s || s.startsWith("// Coming soon");
-  if (!stub(f.compose)) return "compose";
-  if (!stub(f.flutter)) return "flutter";
+  if (f.compose?.component) return "compose";
+  if (f.flutter?.component) return "flutter";
   return "reactNative";
 }
 

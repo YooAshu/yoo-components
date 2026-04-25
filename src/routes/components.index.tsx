@@ -2,15 +2,22 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { CategoryIcon, PxClose, PxGrid, PxList, PxSearch } from "@/components/PixelIcons";
 import { ComponentCard } from "@/components/ComponentCard";
-import { CATEGORIES, COMPONENTS, type ComponentCategory, categoryCount } from "@/data/components";
+import { CATEGORIES, COMPONENTS, categoryCount } from "@/data/components";
+import type { ComponentCategory } from "@/data/types";
 
 export const Route = createFileRoute("/components/")({
   head: () => ({
     meta: [
       { title: "Components — YooComponents" },
-      { name: "description", content: "Browse 50+ mobile UI components for Jetpack Compose, Flutter, and React Native." },
+      {
+        name: "description",
+        content: "Browse 50+ mobile UI components for Jetpack Compose, Flutter, and React Native.",
+      },
       { property: "og:title", content: "All Components — YooComponents" },
-      { property: "og:description", content: "Filter by framework or category. Real code, ready to copy." },
+      {
+        property: "og:description",
+        content: "Filter by framework or category. Real code, ready to copy.",
+      },
     ],
   }),
   component: ComponentsBrowserPage,
@@ -30,13 +37,14 @@ function ComponentsBrowserPage() {
       if (frameworks.size > 0) {
         const hasAny = [...frameworks].some((fw) => {
           const v = c.frameworks[fw];
-          return v && !v.startsWith("// Coming soon");
+          return !!v?.component && !v.component.startsWith("// Coming soon");
         });
         if (!hasAny) return false;
       }
       if (query.trim()) {
         const q = query.toLowerCase();
-        if (!c.name.toLowerCase().includes(q) && !c.description.toLowerCase().includes(q)) return false;
+        if (!c.name.toLowerCase().includes(q) && !c.description.toLowerCase().includes(q))
+          return false;
       }
       return true;
     });
@@ -63,7 +71,16 @@ function ComponentsBrowserPage() {
       <main>
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <div className="font-vt text-base text-muted-foreground">
-            COMPONENTS{category && <> &gt; <span className="text-foreground">{CATEGORIES.find((c) => c.key === category)?.label.toUpperCase()}</span></>}
+            COMPONENTS
+            {category && (
+              <>
+                {" "}
+                &gt;{" "}
+                <span className="text-foreground">
+                  {CATEGORIES.find((c) => c.key === category)?.label.toUpperCase()}
+                </span>
+              </>
+            )}
           </div>
           <div className="flex items-center gap-2">
             <span
@@ -95,17 +112,28 @@ function ComponentsBrowserPage() {
         {(frameworks.size > 0 || category || query) && (
           <div className="mb-4 flex flex-wrap gap-2">
             {[...frameworks].map((fw) => (
-              <button key={fw} onClick={() => toggleFw(fw)} className="pixel-badge flex items-center gap-1.5 hover:bg-secondary">
+              <button
+                key={fw}
+                onClick={() => toggleFw(fw)}
+                className="pixel-badge flex items-center gap-1.5 hover:bg-secondary"
+              >
                 {fw.toUpperCase()} <PxClose size={10} />
               </button>
             ))}
             {category && (
-              <button onClick={() => setCategory(null)} className="pixel-badge flex items-center gap-1.5 hover:bg-secondary">
-                {CATEGORIES.find((c) => c.key === category)?.label.toUpperCase()} <PxClose size={10} />
+              <button
+                onClick={() => setCategory(null)}
+                className="pixel-badge flex items-center gap-1.5 hover:bg-secondary"
+              >
+                {CATEGORIES.find((c) => c.key === category)?.label.toUpperCase()}{" "}
+                <PxClose size={10} />
               </button>
             )}
             {query && (
-              <button onClick={() => setQuery("")} className="pixel-badge flex items-center gap-1.5 hover:bg-secondary">
+              <button
+                onClick={() => setQuery("")}
+                className="pixel-badge flex items-center gap-1.5 hover:bg-secondary"
+              >
                 "{query}" <PxClose size={10} />
               </button>
             )}
@@ -116,7 +144,9 @@ function ComponentsBrowserPage() {
           <EmptyState />
         ) : view === "grid" ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {filtered.map((c, i) => <ComponentCard key={c.id} component={c} index={i} />)}
+            {filtered.map((c, i) => (
+              <ComponentCard key={c.id} component={c} index={i} />
+            ))}
           </div>
         ) : (
           <div className="glass divide-y" style={{ borderColor: "var(--glass-border)" }}>
@@ -133,7 +163,11 @@ function ComponentsBrowserPage() {
                   <div className="font-vt text-lg text-foreground">{c.name}</div>
                   <div className="truncate text-xs text-muted-foreground">{c.description}</div>
                 </div>
-                {c.isNew && <span className="blink pixel-badge" style={{ color: "var(--glow-primary)" }}>NEW</span>}
+                {c.isNew && (
+                  <span className="blink pixel-badge" style={{ color: "var(--glow-primary)" }}>
+                    NEW
+                  </span>
+                )}
               </Link>
             ))}
           </div>
@@ -144,7 +178,12 @@ function ComponentsBrowserPage() {
 }
 
 function Sidebar({
-  frameworks, toggleFw, category, setCategory, query, setQuery,
+  frameworks,
+  toggleFw,
+  category,
+  setCategory,
+  query,
+  setQuery,
 }: {
   frameworks: Set<FW>;
   toggleFw: (fw: FW) => void;
@@ -194,14 +233,19 @@ function Sidebar({
 
       <div className="mb-4">
         <div className="relative">
-          <PxSearch size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <PxSearch
+            size={14}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+          />
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="SEARCH..."
             className="w-full border-2 border-border bg-transparent py-2 pl-9 pr-12 font-vt text-base text-foreground placeholder:text-muted-foreground"
           />
-          <kbd className="absolute right-2 top-1/2 -translate-y-1/2 font-pixel text-[7px] text-muted-foreground">⌘K</kbd>
+          <kbd className="absolute right-2 top-1/2 -translate-y-1/2 font-pixel text-[7px] text-muted-foreground">
+            ⌘K
+          </kbd>
         </div>
       </div>
 
@@ -212,31 +256,46 @@ function Sidebar({
             <button
               onClick={() => setCategory(null)}
               className="flex w-full items-center justify-between gap-2 px-2 py-1.5 text-left transition-colors hover:bg-secondary"
-              style={category === null ? { borderLeft: "3px solid var(--glow-primary)", background: "var(--glass-2)" } : { borderLeft: "3px solid transparent" }}
+              style={
+                category === null
+                  ? { borderLeft: "3px solid var(--glow-primary)", background: "var(--glass-2)" }
+                  : { borderLeft: "3px solid transparent" }
+              }
             >
               <span className="font-vt text-base text-foreground">All</span>
-              <span className="font-pixel text-[7px] text-muted-foreground">{COMPONENTS.length}</span>
+              <span className="font-pixel text-[7px] text-muted-foreground">
+                {COMPONENTS.length}
+              </span>
             </button>
           </li>
           {CATEGORIES.map((c) => (
             <li key={c.key}>
               <button
-                onClick={() => setCategory(c.key)}
+                onClick={() => setCategory(c.key as ComponentCategory)}
                 className="flex w-full items-center justify-between gap-2 px-2 py-1.5 text-left transition-colors hover:bg-secondary"
-                style={category === c.key ? { borderLeft: "3px solid var(--glow-primary)", background: "var(--glass-2)" } : { borderLeft: "3px solid transparent" }}
+                style={
+                  category === c.key
+                    ? { borderLeft: "3px solid var(--glow-primary)", background: "var(--glass-2)" }
+                    : { borderLeft: "3px solid transparent" }
+                }
               >
                 <span className="flex items-center gap-2">
-                  <CategoryIcon category={c.key} size={14} />
+                  <CategoryIcon category={c.key as ComponentCategory} size={14} />
                   <span className="font-vt text-base text-foreground">{c.label}</span>
                 </span>
-                <span className="font-pixel text-[7px] text-muted-foreground">{categoryCount(c.key)}</span>
+                <span className="font-pixel text-[7px] text-muted-foreground">
+                  {categoryCount(c.key as ComponentCategory)}
+                </span>
               </button>
             </li>
           ))}
         </ul>
       </div>
 
-      <div className="mt-4 border-t pt-3 text-center font-vt text-sm text-muted-foreground" style={{ borderColor: "var(--glass-border)" }}>
+      <div
+        className="mt-4 border-t pt-3 text-center font-vt text-sm text-muted-foreground"
+        style={{ borderColor: "var(--glass-border)" }}
+      >
         [ {COMPONENTS.length} COMPONENTS ]
       </div>
     </aside>
